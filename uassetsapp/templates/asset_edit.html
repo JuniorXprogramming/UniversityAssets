@@ -1,0 +1,26 @@
+{% extends 'adminlte/base.html' %}
+{% block content %}
+  <div class="container bg-white p-4" style="border-radius: 25px;">
+    <h3 class="text-center">แก้ไขชุดครุภัณฑ์</h3>
+    <form action="" method="post" style="width: 55%;" class="mx-auto my-3">
+      {% csrf_token %}
+      <div class="form-group row justify-content-center">
+        <div class="col-xl-8">
+          <label for="id_set_name" style="font-size: 1vw;">ชื่อชุดครุภัณฑ์</label>
+          {{ frm.set_name }}
+        </div>
+        <div class="col-xl-4">
+          <label for="id_set_purchase" style="font-size: 1vw;">วันที่ได้รับการอนุมัติ</label>
+          {{ frm.set_purchase }}
+        </div>
+      </div>
+      <div class="form-group row justify-content">
+        <div class="col-xl-12">
+          <label for="id_on_department" style="font-size: 1vw;">สาขาที่รับผิดชอบ</label>
+          {{ frm.on_faculty }}
+        </div>
+      </div>
+      <button type="submit" class="btn btn-warning btn-block"><i class="fas fa-edit"></i>&nbsp;&nbsp;&nbsp;แก้ไขครุภัณฑ์</button>
+    </form>
+  </div>
+{% endblock %}

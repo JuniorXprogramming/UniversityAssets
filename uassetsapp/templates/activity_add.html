@@ -1,0 +1,110 @@
+{% extends 'adminlte/base.html' %}
+{% block content %}
+  <div class="container bg-white p-5" style="border-radius: 25px;">
+    <h3 class="text-center">เพิ่มกิจกรรม</h3>
+    <form action="" method="POST" style="width: 55%;" class="mx-auto">
+      {% csrf_token %}
+      <div class="form-group row justify-content-center">
+        <div class="col-xl-12">
+          <label for="id_activity_name">ชื่อกิจกรรม</label>
+          {{ frm.activity_name }}
+        </div>
+      </div>
+      <div class="form-group row justify-content-center">
+        <div class="col-xl-6">
+          <label for="id_activity_start_date">วันเริ่มต้น</label>
+          {{ frm.activity_start_date }}
+        </div>
+        <div class="col-xl-6">
+          <label for="id_activity_end_date">วันสิ้นสุด</label>
+          {{ frm.activity_end_date }}
+        </div>
+      </div>
+      <div class="form-group row justify-content-center">
+        <div class="col-xl-12">
+            <div class="col-xl-6">
+                <div class="form-check">
+                  {{ frm.allday }}
+                  <label class="form-check-label" for="id_allday">ตลอดวัน</label>
+                </div>
+              </div>
+        </div>
+      </div>
+      <div class="form-group row justify-content-center">
+        <div class="col-xl-6">
+          <label for="id_activity_start_time">เวลาเริ่มต้น</label>
+          {{ frm.activity_start_time }}
+        </div>
+        <div class="col-xl-6">
+          <label for="id_activity_end_time">เวลาสิ้นสุด</label>
+          {{ frm.activity_end_time }}
+        </div>
+      </div>
+      <div class="form-group row justify-content-center">
+        <div class="col-xl-6">
+            <label for="id_activity_responsible">ผู้รับผิดชอบ</label>
+            {{ frm.activity_responsible }}
+        </div>
+        <div class="col-xl-6">
+            <label for="id_on_semester">ปีการศึกษา</label>
+            {{ frm.on_semester }}
+        </div>
+      </div>
+      <div class="form-group row justify-content-center">
+        <div class="col-xl-6">
+            <label for="id_on_location">สถานที่</label>
+            {{ frm.on_location }}
+        </div>
+        <div class="col-xl-6">
+            <label for="id_on_department">สาขา</label>
+            {{ frm.on_department }}
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-xl-12">
+          <div class="form-check">
+            {{ frm.recur }}
+            <label class="form-check-label" for="id_recur">เกิดซ้ำหรือไม่</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row justify-content-center">
+        <div class="col-xl-12">
+              <label for="id_recur">ประเภทการเกิดซ้ำ</label>
+              {{ frm.typerecur }}
+          </div>
+      </div>
+      <button type="submit" class="btn btn-success btn-block"><i class="fas fa-plus"></i>&nbsp;&nbsp;&nbsp;เพิ่มกิจกรรม</button>
+    </form>
+  </div>
+
+{% block extra_js %}
+  <script>
+    document.getElementById("id_allday").addEventListener('click', function() {
+        if (document.getElementById("id_allday").checked) {
+            document.getElementById("id_activity_start_time").value = "";
+            document.getElementById("id_activity_end_time").value = "";
+            document.getElementById("id_activity_start_time").disabled = true;
+            document.getElementById("id_activity_end_time").disabled = true;
+            document.getElementById("id_activity_start_time").required = false;
+            document.getElementById("id_activity_end_time").required = false;
+        } else {
+            document.getElementById("id_activity_start_time").disabled = false;
+            document.getElementById("id_activity_end_time").disabled = false;
+            document.getElementById("id_activity_start_time").required = true;
+            document.getElementById("id_activity_end_time").required = true;
+        }
+    })
+
+    document.getElementById("id_recur").addEventListener('click', function() {
+        if (document.getElementById("id_recur").checked) {
+            document.getElementById("id_typerecur").disabled = false;
+            document.getElementById("id_typerecur").required = true;
+        } else {
+            document.getElementById("id_typerecur").value = "1";
+            document.getElementById("id_typerecur").disabled = true;
+        }
+    })
+  </script>
+{% endblock %}
+{% endblock %}

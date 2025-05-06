@@ -1,0 +1,59 @@
+{% extends 'adminlte/base.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row bg-white my-3 p-5" style="border-radius: 25px;">
+            <div class="row justify-content-center" style="width: 100%;">
+                <h1 class="text-center mt-3">แก้ไขรายการครุภัณฑ์</h1>
+            </div>
+            <div class="col-xl-12">
+                <form action="" method="POST" style="width: 55%;" class="mx-auto my-3" id="addAsset" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group row justify-content-center">
+                        <div class="col-xl-6">
+                            <label for="id_asset_code" style='font-size: 1vw;'>รหัสครุภัณฑ์</label>
+                            {{ frm.asset_code }}
+                        </div>
+                        <div class="col-xl-6">
+                            <label for="id_asset_name" style='font-size: 1vw;'>ชื่อครุภัณฑ์</label>
+                            {{ frm.asset_name }}
+                        </div>
+                    </div>
+                    <div class="form-group row justify-content-center">
+                        <div class="col-xl-6">
+                            <label for="id_asset_purchase" style="font-size: 1vw;">มูลค่าครุภัณฑ์</label>
+                            {{ frm.asset_value }}
+                        </div>
+                        
+                        <div class="col-xl-6">
+                            <label for="id_on_status" style="font-size: 1vw;">สถานะของครุภัณฑ์</label>
+                            {{ frm.on_status }}
+                        </div>
+                    </div>
+                    <div class="form-group row justify-content-center">
+                        <div class="col-xl-6">
+                            <label for="id_asset_purchase" style="font-size: 1vw;">วันที่ส่งมอบครุภัณฑ์</label>
+                            {{ frm.asset_purchase }}
+                        </div>
+                        <div class="col-xl-6">
+                            <label for="id_asset_expire" style="font-size: 1vw;">จำนวนปีที่คาดว่าจะใช้งาน</label>
+                            {{ frm.asset_expire }}
+                        </div>
+                    </div>
+                    <div class="form-group row justify-content-center">
+                        <div class="col-xl-12">
+                            <label for="id_on_location" style='font-size: 1vw;'>สถานที่จัดเก็บ</label>
+                            {{ frm.on_location }}
+                        </div>
+                    </div>
+                    <div class="form-group row justify-content-center">
+                        <div class="col-xl-12">
+                            <label for="id_asset_img" style='font-size: 1vw;'>สถานที่จัดเก็บ</label>
+                            {{ frm.asset_img }}
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-warning btn-block"><i class="fas fa-edit"></i>&nbsp;&nbsp;&nbsp;แก้ไขรายการครุภัณฑ์</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

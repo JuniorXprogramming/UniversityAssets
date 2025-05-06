@@ -1,0 +1,169 @@
+{% extends 'adminlte/base.html' %}
+
+{% block content %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xl-3">
+        <div class="row m-2 p-3 bg-white flex-column" style="border-radius: 25px">
+          <h2>กำลังใช้งาน</h2>
+          <h1 class="text-success">{{ firstrow.av }}</h1>
+        </div>
+      </div>
+      <div class="col-xl-3">
+        <div class="row m-2 p-3 bg-white flex-column" style="border-radius: 25px">
+          <h2>ไม่ได้ใช้งาน</h2>
+          <h1 class="text-danger">{{ firstrow.nav }}</h1>
+        </div>
+      </div>
+      <div class="col-xl-3">
+        <div class="row m-2 p-3 bg-white flex-column" style="border-radius: 25px">
+          <h2>ซ่อมแซม</h2>
+          <h1 class="text-warning">{{ firstrow.maintain }}</h1>
+        </div>
+      </div>
+      <div class="col-xl-3">
+        <div class="row m-2 p-3 bg-white flex-column" style="border-radius: 25px">
+          <h2>ค่าใช้จ่ายต่อชั่วโมง</h2>
+          <h1 class="text-primary">{{ firstrow.cost_per_hour }}</h1>
+        </div>
+      </div>
+    </div>
+    <div class="row align-items-center">
+      <div class="col-xl-9">
+        <div class="row m-2 p-3 bg-white flex-column" style="border-radius: 25px">
+          <table class="display" id="available_table">
+            <thead>
+              <tr>
+                <th>หมายเลขรายการครุภัณฑ์</th>
+                <th>วันที่คาดว่าจะใช้งาน</th>
+                <th>มูลค่ารายการครุภัณฑ์</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for d in data %}
+                <tr>
+                  <td>{{ d.asset_code }}</td>
+                  <td>{{ d.date_expire }}</td>
+                  <td>{{ d.asset_value }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-xl-3" style="height: 100%;">
+        <div class="row" style="border-radius: 25px">
+            {% if permission == 1 %}
+            <div class="col-xl-12">
+              <div class="row bg-white m-2 p-3 flex-column" style="border-radius: 15px;">
+                  <a href="/activity_edit/{{ activity_id }}" class="btn btn-warning btn-lg"><i class="fas fa-edit"></i>&nbsp;&nbsp;&nbsp;แก้ไข</a>
+              </div>
+          </div>
+          <div class="col-xl-12">
+              <div class="row bg-white m-2 p-3 flex-column" style="border-radius: 15px;">
+                  <a href="#" onclick="openSweetalert({{ activity_id }})" class="btn btn-danger btn-lg"><i class="fas fa-trash"></i>&nbsp;&nbsp;&nbsp;ลบ</a>
+              </div>
+          </div>
+            {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="row" >
+        <div class="col-xl-5">
+            <div class="row m-2 flex-column p-3 bg-white" style="border-radius: 25px;">
+                <h3>จำนวนผู้เข้าร่วม</h3>
+                <h1 class="text-primary">{{ lastrow.total_participants }} คน</h1>
+                <h3>ผู้รับผิดชอบ</h3>
+                <h1 class="text-success">{{ lastrow.responsible }}</h1>
+            </div>
+        </div>
+        <div class="col-xl-7">
+            <div class="row m-2 flex-column p-3 bg-white" style="border-radius: 25px;">
+                <div class="col-xl-12">
+                    <div class="row">
+                        <div class="col-xl-6">
+                            <h3>จำนวนผู้เข้าร่วม</h3>
+                        </div>
+                        <div class="col-xl-6">
+                            <p class="text-right"><a href="/department_activity/{{ activity_id }}">จัดการ</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-12">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>สาขา</th>
+                                <th>จำนวนผู้เข้าร่วม</th>
+                                <th>ค่าใช้จ่ายต่อสาขา</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for d in department_participant %}
+                                <tr>
+                                    <td>{{ d.department.on_department }}</td>
+                                    <td>{{ d.department.participants }}</td>
+                                    <td>{{ d.cost_per_department }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  {% block extra_js %}
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css" />
+    <script src="https://cdn.datatables.net/2.2.1/js/dataTables.js"></script>
+    <script>
+      $(document).ready(function () {
+        console.log($('#available_table tbody tr').length + ' rows found.')
+        if ($.fn.dataTable.isDataTable('#available_table')) {
+          // ถ้า DataTable ถูกสร้างขึ้นแล้ว ให้ทำลายมันก่อน
+          $('#available_table').DataTable().destroy()
+        }
+        $('#available_table').DataTable({
+          paging: true,
+          searching: true,
+          pageLength: 5,
+          lengthMenu: [5, 10, 25, 50],
+          "language": {
+                        "sEmptyTable": "ไม่มีข้อมูลในตาราง",
+                        "sInfo": "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ",
+                        "sInfoEmpty": "แสดง 0 ถึง 0 จาก 0 รายการ",
+                        "sInfoFiltered": "(กรองจาก _MAX_ รายการทั้งหมด)",
+                        "sLengthMenu": "แสดง _MENU_ รายการ",
+                        "sSearch": "ค้นหา:",
+                        "oPaginate": {
+                            "sFirst": "หน้าแรก",
+                            "sPrevious": "ก่อนหน้า",
+                            "sNext": "ถัดไป",
+                            "sLast": "หน้าสุดท้าย"
+                        }
+                    }
+        })
+      })
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      function openSweetalert(e) {
+        console.log(e)
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = `/activity_delete/${e}`
+          }
+        })
+      }
+    </script>
+  {% endblock %}
+{% endblock %}

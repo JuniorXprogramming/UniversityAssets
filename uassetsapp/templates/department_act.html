@@ -1,0 +1,79 @@
+{% extends 'adminlte/base.html' %}
+
+{% block content %}
+  <div class="container">
+    {% if permission == 1 %}
+    <div class="row justify-content-end">
+      <a href="/department_activity_add/{{ activity_id }}" class="btn btn-success"><i class="fas fa-plus mr-2"></i>&nbsp;&nbsp;&nbsp;ADD</a>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="container bg-white p-4" style="border-radius: 25px;">
+    <h1 class="text-center">สาขาที่เข้าร่วมกิจกรรม</h1>
+    <table class="dispaly" id="department_table">
+      <thead>
+        <tr>
+          {% if permission == 1 %}
+            <th>จำนวนผู้เข้าร่วม</th>
+            <th>สาขา</th>
+            <th></th>
+            <th></th>
+          {% else %}
+            <th>จำนวนผู้เข้าร่วม</th>
+              <th>สาขา</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for d in data %}
+          <tr>
+            {% if permission == 1 %}
+            <td>{{ d.participants }}</td>
+            <td>{{ d.on_department }}</td>
+            <td><a href="/department_activity_edit/{{ d.id }}" class="btn btn-warning"><i class="fas fa-edit text-light"></i></a></td>
+            <td><a href="/department_activity_delete/{{ d.id }}" class="btn btn-danger"><i class="fas fa-trash text-light"></i></a></td>
+            {% else %}
+            <td>{{ d.participants }}</td>
+            <td>{{ d.on_department }}</td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css" />
+    <script src="https://cdn.datatables.net/2.2.1/js/dataTables.js"></script>
+  <script>
+    $(document).ready(function () {
+        console.log($('#department_table tbody tr').length + ' rows found.')
+        if ($.fn.dataTable.isDataTable('#department_table')) {
+          // ถ้า DataTable ถูกสร้างขึ้นแล้ว ให้ทำลายมันก่อน
+          $('#department_table').DataTable().destroy()
+        }
+        $('#department_table').DataTable({
+          paging: true,
+          searching: true,
+          pageLength: 5,
+          lengthMenu: [5, 10, 25, 50],
+          "language": {
+                        "sEmptyTable": "ไม่มีข้อมูลในตาราง",
+                        "sInfo": "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ",
+                        "sInfoEmpty": "แสดง 0 ถึง 0 จาก 0 รายการ",
+                        "sInfoFiltered": "(กรองจาก _MAX_ รายการทั้งหมด)",
+                        "sLengthMenu": "แสดง _MENU_ รายการ",
+                        "sSearch": "ค้นหา:",
+                        "oPaginate": {
+                            "sFirst": "หน้าแรก",
+                            "sPrevious": "ก่อนหน้า",
+                            "sNext": "ถัดไป",
+                            "sLast": "หน้าสุดท้าย"
+                        }
+                    }
+        })
+      })
+  </script>
+{% endblock %}
+{% endblock %}

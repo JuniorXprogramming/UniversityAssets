@@ -1,0 +1,94 @@
+{% extends 'adminlte/base.html' %}
+{% block content %}
+  <div class="container-fluid">
+    <div class="row justify-content-end mr-3 mb-3">
+      <a href="/status_add/" class="btn btn-success">
+        <i class="fas fa-plus"></i>
+        &nbsp;&nbsp;&nbsp;ADD
+      </a>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row bg-white p-3 mx-3" style="border-radius: 25px;">
+      <div class="col-xl-12">
+        <h1 class="text-center">สถานะรายการครุภัณฑ์</h1>
+      </div>
+      <div class="col-xl-12">
+        <table class="display" id="location_table">
+          <thead>
+            <tr>
+              <th style="font-size: 1vw;">ชื่อสถานะ</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for d in status %}
+              <tr>
+                <td style="font-size: 1vw;">{{ d.status_name }}</td>
+                <td>
+                  <a href="/status_edit/{{ d.id }}" class="btn btn-warning"><i class="fas fa-edit text-light"></i></a>
+                </td>
+                <td>
+                  <a href="#" onclick="openSweetalert({{d.id}})" class="btn btn-danger"><i class="fas fa-trash text-light"></i></a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% block extra_js %}
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css" />
+    <script src="https://cdn.datatables.net/2.2.1/js/dataTables.js"></script>
+    <script>
+      $(document).ready(function () {
+        if ($.fn.dataTable.isDataTable('#location_table')) {
+          // ถ้า DataTable ถูกสร้างขึ้นแล้ว ให้ทำลายมันก่อน
+          $('#location_table').DataTable().destroy()
+        }
+        $('#location_table').DataTable({
+          paging: true,
+          searching: true,
+          pageLength: 10,
+          lengthMenu: [5, 10, 25, 50],
+          "language": {
+                        "sEmptyTable": "ไม่มีข้อมูลในตาราง",
+                        "sInfo": "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ",
+                        "sInfoEmpty": "แสดง 0 ถึง 0 จาก 0 รายการ",
+                        "sInfoFiltered": "(กรองจาก _MAX_ รายการทั้งหมด)",
+                        "sLengthMenu": "แสดง _MENU_ รายการ",
+                        "sSearch": "ค้นหา:",
+                        "oPaginate": {
+                            "sFirst": "หน้าแรก",
+                            "sPrevious": "ก่อนหน้า",
+                            "sNext": "ถัดไป",
+                            "sLast": "หน้าสุดท้าย"
+                        }
+                    }
+        })
+      })
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      function openSweetalert(e) {
+        console.log(e)
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = `/status_delete/${e}`
+          }
+        })
+      }
+    </script>
+  {% endblock %}
+{% endblock %}

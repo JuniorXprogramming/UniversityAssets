@@ -1,0 +1,100 @@
+{% extends 'adminlte/base.html' %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-end mr-3">
+        <a href="/list_asset/add/{{ asset_id }}" class="btn btn-success">
+            <i class="fas fa-plus"></i>
+            &nbsp;&nbsp;&nbsp;เพิ่มรายการครุภัณฑ์
+        </a>
+    </div>
+</div>
+    <div class="container-fluid mt-3">
+        <h1 class="text-center">รายการครุภัณฑ์</h1>
+        <div class="row bg-white p-3 mx-3" style="border-radius: 25px;">
+            <div class="col-xl-12">
+                <table class="display" id="assetTable">
+                    <thead>
+                        <tr>
+                            <th style="font-size: 1.1vw;">รหัสครุภัณฑ์</th>
+                            <th style="font-size: 1.1vw;">ชื่อครุภัณฑ์</th>
+                            <th style="font-size: 1.1vw;">วันที่ส่งมอบ</th>
+                            <th style="font-size: 1.1vw;">จำนวนปีที่คาดว่าจะใช้งาน</th>
+                            <th style="font-size: 1.1vw;">วันที่คาดว่าจะใช้งาน</th>
+                            <th style="font-size: 1.1vw;" width="280">สาขาที่รับผิดชอบ</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for d in list_asset %}   
+                            <tr>
+                                <td style="font-size: 1vw;" title="{{d.asset_code}}" class="text-truncate">{{ d.asset_code }}</td>
+                                <td style="font-size: 1vw;" class="text-truncate">{{ d.asset_name }}</td>
+                                <td style="font-size: 1vw;" class="text-truncate">{{ d.asset_purchase }}</td>
+                                <td style="font-size: 1vw;">{{ d.asset_expire }} ปี</td>
+                                <td style="font-size: 1vw;">{{ d.date_expire }}</td>
+                                <td style="font-size: 1vw;">{{ d.on_location.on_department.departmentname }}</td>
+                                <td><a href="/list_asset/edit/{{ d.id }}" class='btn btn-warning'><i class="fas fa-edit text-light"></i></a></td>
+                                <td><a href="#" onclick="openSweetalert({{d.id}})" class='btn btn-danger'><i class="fas fa-trash text-light"></i></a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+      console.log($('#assetTable tbody tr').length + ' rows found.');
+      if ($.fn.dataTable.isDataTable("#assetTable")) {
+        // ถ้า DataTable ถูกสร้างขึ้นแล้ว ให้ทำลายมันก่อน
+        $("#assetTable").DataTable().destroy();
+      }
+      $("#assetTable").DataTable({
+        paging: true,
+        searching: true,
+        pageLength: 10,
+        lengthMenu: [5, 10, 25, 50],
+        "language": {
+            "sEmptyTable": "ไม่มีข้อมูลในตาราง",
+            "sInfo": "แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ",
+            "sInfoEmpty": "แสดง 0 ถึง 0 จาก 0 รายการ",
+            "sInfoFiltered": "(กรองจาก _MAX_ รายการทั้งหมด)",
+            "sLengthMenu": "แสดง _MENU_ รายการ",
+            "sSearch": "ค้นหา:",
+            "oPaginate": {
+                "sFirst": "หน้าแรก",
+                "sPrevious": "ก่อนหน้า",
+                "sNext": "ถัดไป",
+                "sLast": "หน้าสุดท้าย"
+            }
+        }
+      });
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    function openSweetalert(e){
+        console.log(e)
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/list_asset/delete/${e}`
+            }
+          });
+    }
+  </script>
+  
+{% endblock %}
+{% endblock %}

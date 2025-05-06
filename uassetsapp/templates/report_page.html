@@ -1,0 +1,24 @@
+{% extends 'adminlte/base.html' %}
+{% block content %}
+    <div class="container bg-white p-3" style="border-radius: 25px;">
+        <h3 class="text-center">รายงาน</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>ปีการศึกษา</td>
+                    <td>csv</td>
+                    <td>preview</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in data %}
+                    <tr>
+                        <td style="font-size: 1.2vw;">ปีการศึกษาที่ {{ d.semester_year }}</td>
+                        <td style="font-size: 1.2vw;"><a href="/report_csv/{{ d.id }}" class="btn btn-danger"><i class="fas fa-download text-light"></i></a></td>
+                        <td style="font-size: 1.2vw;"><a href="/preview_data/{{ d.id }}" class="btn btn-secondary"><i class="fas fa-eye text-light"></i></a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

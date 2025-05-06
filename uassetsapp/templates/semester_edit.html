@@ -1,0 +1,36 @@
+{% extends 'adminlte/base.html' %}
+{% block content %}
+    <div class="container bg-white p-3" style="border-radius: 25px;">
+        <h3 class="text-center">เพิ่มปีการศึกษา</h3>
+        <form action="" method="POST" style="width: 55%;" class="mx-auto">
+            {% csrf_token %}
+            <div class="form-group row justify-content-center">
+                <div class="col-xl-8">
+                    <label for="id_semester_name" style="font-size: 1vw;">ชื่อปีการศึกษา ภาคการศึกษา</label>
+                    {{ frm.semester_name }}
+                </div>
+                <div class="col-xl 4">
+                    <label for="id_semester_year" style="font-size: 1vw;">ปีการศึกษา</label>
+                    {{ frm.semester_year }}
+                </div>
+            </div>
+            <div class="form-group row justify-content-center">
+                <div class="col-xl-4">
+                    <label for="id_semester_start" style="font-size: 1vw;">วันที่เริ่มต้น</label>
+                    {{ frm.semester_start }}
+                </div>
+                <div class="col-xl-4">
+                    <label for="id_semester_end" style="font-size: 1vw;">วันที่สิ้นสุด</label>
+                    {{ frm.semester_end }}
+                </div>
+                <div class="col-xl-4">
+                    <label for="id_semester_number" style="font-size: 1vw;">ภาคการศึกษา</label>
+                    {{ frm.semester_number }}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-warning btn-block">
+                <i class="fas fa-edit"></i>&nbsp;&nbsp;&nbsp;EDIT
+            </button>
+        </form>
+    </div>
+{% endblock %}

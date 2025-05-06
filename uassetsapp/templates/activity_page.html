@@ -1,0 +1,71 @@
+{% extends 'adminlte/base.html' %}
+
+{% block content %}
+  {% block extra_js %}
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+    <script>
+      async function fetchData() {
+        let response = await fetch('/activity_list');
+        let data = await response.json();
+        console.log(data)
+        return data;
+      }
+      
+      document.addEventListener('DOMContentLoaded', async function () {
+        var calendarEl = document.getElementById('calendar');
+        var data = await fetchData();
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          headerToolbar: { center: 'dayGridMonth,timeGridWeek' }, // ปุ่มเปลี่ยนมุมมอง
+      
+          views: {
+            dayGridMonth: {
+              titleFormat: function (date) {
+                const buddhistYear = date.date.year + 543;  // แปลงปี ค.ศ. เป็น พ.ศ.
+                const thaiMonth = [
+                  'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+                  'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+                ];
+                const monthName = thaiMonth[date.date.month];  // แปลงเดือนเป็นภาษาไทย
+                return `${monthName} ${buddhistYear}`;  // แสดงชื่อเดือนและปี พ.ศ.
+              }
+            }
+          },
+          editable: true,
+          selectable: true,
+          events: data,
+          contentHeight: '70vh',
+          buttonText: {
+            today: 'วันนี้',
+            month: 'เดือน',
+            week: 'สัปดาห์',
+            day: 'วัน'
+          },
+          dayHeaderContent: function (args) {
+            const daysThai = ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'];
+            return daysThai[args.date.getDay()];
+          },
+          dateClick: function (info) {
+            let selectedDate = info.dateStr;
+            window.location.href = `/activity_add/${selectedDate}`;
+          },
+          eventClick: function (info) {
+            let selectedId = info.event.id;
+            window.location.href = `/activity_detail/${selectedId}`;
+          }
+        });
+        calendar.render();
+      });
+    </script>
+  {% endblock %}
+  
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xl-12"><h1 class='text-center'>กิจกรรม</h1></div>
+    </div>
+    <div class="row mx-3 bg-white p-4" style="border-radius: 40px;">
+      <div class="col-xl-12">
+        <div id="calendar"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
